@@ -11,7 +11,7 @@ int main() {
     if (start == end){
         error("start", "end", "can't be equal");
     }
-
+    
     // Dictionary of words
     set<string> word_list;
     load_words(word_list, "src/words.txt");

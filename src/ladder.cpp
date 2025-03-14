@@ -25,10 +25,10 @@ bool is_adjacent(const string& word1, const string& word2) {
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    if (begin_word == end_word) {
-        error(begin_word, end_word, "Start and end words must be different");
-        return {};
-    }
+    // if (begin_word == end_word) {
+    //     error(begin_word, end_word, "Start and end words must be different");
+    //     return {};
+    // }
     
     queue<vector<string>> ladder_queue;
     set<string> visited;
@@ -66,9 +66,9 @@ void print_word_ladder(const vector<string>& ladder) {
     if (ladder.empty()) {
         cout << "No word ladder found." << endl;
     } else {
+        count << "Word ladder found: ";
         for (size_t i = 0; i < ladder.size(); ++i) {
-            if (i > 0) cout << " -> ";
-            cout << ladder[i];
+            cout << ladder[i] << " ";
         }
         cout << endl;
     }
