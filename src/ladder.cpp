@@ -74,6 +74,6 @@ void print_word_ladder(const vector<string>& ladder) {
     }
 }
 
-verify_word_ladder(){
+void verify_word_ladder(){
     //
 }
