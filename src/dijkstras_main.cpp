@@ -1,6 +1,4 @@
-
 #include "dijkstras.h"
-
 
 
 int main() {
@@ -15,12 +13,10 @@ int main() {
 
     vector<int> previous;
     vector<int> distances = dijkstra_shortest_path(G, source, previous);
-
-    cout << "Shortest distances from vertex " << source << ":\n";
-    for (size_t i = 0; i < distances.size(); i++) {
-        cout << "To " << i << ": " << (distances[i] == INF ? "INF" : to_string(distances[i])) << endl;
-    }
-
+    // cout << "Shortest distances from vertex " << source << ":\n";
+    // for (size_t i = 0; i < distances.size(); i++) {
+    //     cout << "To " << i << ": " << (distances[i] == INF ? "INF" : to_string(distances[i])) << endl;
+    // }
     int destination;
     cout << "Enter destination vertex: ";
     cin >> destination;
