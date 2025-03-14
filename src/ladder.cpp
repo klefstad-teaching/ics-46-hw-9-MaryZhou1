@@ -1,7 +1,7 @@
 #include "ladder.h"
 
 void error(string word1, string word2, string msg) {
-    cerr << "Error: " << msg << " (" << word1 << " -> " << word2 << ")" << endl;
+    cerr << "Error: " << word1 << ", " << word2 << ", " << msg << endl;
     exit(1);
 }
 
@@ -66,14 +66,14 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 void load_words(set<string>& word_list, const string& file_name) {
     ifstream file(file_name);
     if (!file) {
-        cerr << "Error: Cannot open file " << file_name << endl;
-        exit(1);
+        error("load words", "can't open file", "");
     }
 
     string word;
     while (file >> word) {
         word_list.insert(word);
     }
+
 
     file.close();
 }
