@@ -6,16 +6,18 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const string& str1, const string& str2, int d) {
-    if (str1.size() != str2.size()) return false;
-
-    int diff_count = 0;
-    for (size_t i = 0; i < str1.size(); i++) {
-        if (str1[i] != str2[i]) {
-            diff_count++;
-            if (diff_count > d) return false;
-        }
+    int len1 = str1.size(), len2 = str2.size();
+    if (abs(len1 - len2) > 1) return false;
+    int diff = 0, i = 0, j = 0;
+    while (i < len1 && j < len2) {
+        if (str1[i] != str2[j]) {
+            if (++diff > d) return false;
+            if (len1 > len2) ++i;
+            else if (len1 < len2) ++j;
+            else { ++i; ++j; }
+        } else { ++i; ++j; }
     }
-    return diff_count == d;
+    return diff + (len1 - i) + (len2 - j) <= d;
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
@@ -23,86 +25,55 @@ bool is_adjacent(const string& word1, const string& word2) {
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    if (begin_word == end_word) return {begin_word};
-
-    queue<vector<string>> ladders;
-    set<string> visited;
+    if (begin_word == end_word) {
+        error(begin_word, end_word, "Start and end words must be different");
+        return {};
+    }
     
-    ladders.push({begin_word});
+    queue<vector<string>> ladder_queue;
+    set<string> visited;
+    ladder_queue.push({begin_word});
     visited.insert(begin_word);
-
-    while (!ladders.empty()) {
-        int size = ladders.size();
-        set<string> level_visited;
-
-        for (int i = 0; i < size; i++) {
-            vector<string> ladder = ladders.front();
-            ladders.pop();
-
-            string last_word = ladder.back();
-            for (const string& word : word_list) {
-                if (visited.count(word) == 0 && is_adjacent(last_word, word)) {
-                    vector<string> new_ladder = ladder;
-                    new_ladder.push_back(word);
-
-                    if (word == end_word) {
-                        return new_ladder;
-                    }
-
-                    ladders.push(new_ladder);
-                    level_visited.insert(word);
-                }
+    
+    while (!ladder_queue.empty()) {
+        vector<string> ladder = ladder_queue.front();
+        ladder_queue.pop();
+        string last_word = ladder.back();
+        
+        for (const string& word : word_list) {
+            if (is_adjacent(last_word, word) && !visited.count(word)) {
+                vector<string> new_ladder = ladder;
+                new_ladder.push_back(word);
+                visited.insert(word);
+                
+                if (word == end_word) return new_ladder;
+                ladder_queue.push(new_ladder);
             }
         }
-
-        for (const string& word : level_visited) {
-            visited.insert(word);
-        }
     }
-
     return {};
 }
 
 void load_words(set<string>& word_list, const string& file_name) {
     ifstream file(file_name);
-    if (!file) {
-        error("load words", "can't open file", "");
-    }
-
     string word;
     while (file >> word) {
         word_list.insert(word);
     }
-
-
-    file.close();
 }
 
 void print_word_ladder(const vector<string>& ladder) {
     if (ladder.empty()) {
         cout << "No word ladder found." << endl;
     } else {
-        for (size_t i = 0; i < ladder.size(); i++) {
+        for (size_t i = 0; i < ladder.size(); ++i) {
+            if (i > 0) cout << " -> ";
             cout << ladder[i];
-            if (i != ladder.size() - 1) cout << " -> ";
         }
         cout << endl;
     }
 }
 
-void verify_word_ladder() {
-    set<string> word_list;
-    string file_name = "words.txt";
-
-    load_words(word_list, file_name);
-
-    string start, end;
-    cout << "Enter start word: ";
-    cin >> start;
-    cout << "Enter end word: ";
-    cin >> end;
-
-    vector<string> ladder = generate_word_ladder(start, end, word_list);
-    print_word_ladder(ladder);
+verify_word_ladder(){
+    //
 }
-

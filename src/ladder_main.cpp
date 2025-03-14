@@ -1,6 +1,5 @@
 #include "ladder.h"
 
-
 int main() {
     string start, end;
     cout << "Enter start word: ";
